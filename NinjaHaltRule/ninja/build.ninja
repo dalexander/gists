@@ -1,0 +1,12 @@
+## How does ninja -k 1 work?
+
+rule succeedSlowly
+  command = sleep 5 && echo "output" > $out
+
+rule quicklyFail
+  command = sleep 2 && exit 1
+
+build 1: quicklyFail
+build 2: succeedSlowly
+build 3: succeedSlowly
+build 4: succeedSlowly
