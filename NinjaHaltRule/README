@@ -1,0 +1,29 @@
+
+
+  # -k 1 is the default, but we'll be explicit:
+
+  $ ninja -v -C ninja -j 2 -k 1
+  ninja: Entering directory `ninja'
+  [1/4] sleep 2 && exit 1
+  [2/4] sleep 5 && echo "output" > 2
+  FAILED: sleep 2 && exit 1
+  ninja: build stopped: subcommand failed.
+
+  $ ls ninja
+  2           build.ninja
+
+
+  $ make -C make -j 2
+  sleep 2 && exit 1
+  sleep 5 && echo "output" > 2
+  make: *** [1] Error 1
+  make: *** Waiting for unfinished jobs....
+
+  $ ls make
+  2        Makefile
+
+
+
+Conclusion: contrary to what I initially believed, ninja and make both
+handle subtask failure under parallel execution in the same way: they
+let unfinished jobs finish, then shut down.
